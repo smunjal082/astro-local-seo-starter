@@ -1,0 +1,40 @@
+---
+import data from '../../data/data.json';
+
+const { slug } = Astro.params;
+const page = data.find(item =>
+  `${item.service.toLowerCase().replace(/\s+/g, '-')}-${item.city.toLowerCase().replace(/\s+/g, '-')}-${item.state.toLowerCase()}` === slug
+);
+
+if (!page) throw new Error("Page not found");
+---
+
+<html lang="en">
+  <head>
+    <title>{page.meta_title}</title>
+    <meta name="description" content={page.meta_desc} />
+  </head>
+  <body>
+    <h1>{page.service} in {page.city}, {page.state}</h1>
+    <p>{page.about}</p>
+    <h2>Why Choose Us</h2>
+    <ul>
+      {page.why_us.split(',').map(item => <li>{item.trim()}</li>)}
+    </ul>
+    <h2>Our Services</h2>
+    <ul>
+      {page.services_list.split(',').map(service => <li>{service.trim()}</li>)}
+    </ul>
+    <h2>Customer Reviews</h2>
+    <blockquote>{page.review1}</blockquote>
+    <blockquote>{page.review2}</blockquote>
+    <blockquote>{page.review3}</blockquote>
+    <h2>FAQs</h2>
+    <p><strong>{page.faq_q1}</strong><br />{page.faq_a1}</p>
+    <p><strong>{page.faq_q2}</strong><br />{page.faq_a2}</p>
+    <p><strong>{page.faq_q3}</strong><br />{page.faq_a3}</p>
+    <footer>
+      <p>Contact us at <a href={`tel:${page.phone}`}>{page.phone}</a> or <a href={`mailto:${page.email}`}>{page.email}</a></p>
+    </footer>
+  </body>
+</html>
